@@ -6,14 +6,14 @@ from rest_framework.views import APIView
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-
+import os
 
 class Line(APIView):
     
     def __init__(self):
 
-        self.line_bot_api = LineBotApi(line_config.LINE_CHANNEL_ACCESS_TOKEN)    
-        self.handler = WebhookHandler(line_config.LINE_CHANNEL_SECRET)    
+        self.line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))#line_config.LINE_CHANNEL_ACCESS_TOKEN)    
+        self.handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))#line_config.LINE_CHANNEL_SECRET)    
 
     def handle_message(self, event):
         """
