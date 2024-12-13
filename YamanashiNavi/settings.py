@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'app',
-    'api.line'
+    'api.line',
+    'api.with_chatGPT',
+    'chatbot'
 ]
 
 MIDDLEWARE = [

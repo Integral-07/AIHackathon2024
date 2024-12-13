@@ -1,8 +1,6 @@
 from django.urls import path
-from . import views
+from .import views
 
 urlpatterns = [
-
-    path("", views.Line.as_view()),
-    path("callback/", views.Line.handle_message)
+    path("callback/", views.message_handle, name="line-callback"),
 ]
