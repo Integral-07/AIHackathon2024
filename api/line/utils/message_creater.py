@@ -1,7 +1,7 @@
 from openai import OpenAI
 import os
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_ASSISTANT_API_KEY"))
 
 def create_single_text_message(event):
     
