@@ -16,16 +16,8 @@ class LineMessage():
     def __init__(self, messages):
         self.messages = messages
 
-    def reply(self, reply_token):
-        body = {
-            'replyToken': reply_token,
-            'messages': [
-                { 
-                  'type': 'text', 
-                  'text': self.messages 
-                },
-            ]
-        }
+    def reply(self, body):
+        
         print(body)
         req = urllib.request.Request(REPLY_ENDPOINT_URL, json.dumps(body).encode(), HEADER)
         try:
@@ -44,5 +36,51 @@ def message_handle(request):
         #message = data['message']
         reply_token = event['replyToken']
         line_message = LineMessage(message_creater.create_single_text_message(event))
-        line_message.reply(reply_token)
-        #return HttpResponse("ok")
+        if(event['message']['type'] == 'location'):
+            #位置情報を受信したとき
+            body = {
+                'replyToken': reply_token,
+                'messages': [
+                    message_creater.create_carousel_template(line_message.messages)
+                ]
+            }
+        else:
+            body = {
+                'replyToken': reply_token,
+                'messages': [
+                {
+                    "type": "text",
+                    "text": line_message.messages,
+                    "quickReply": {
+                    "items": [
+                        {
+                            "type": "action",
+                            "imageUrl": "https://example.com/sushi.png",
+                            "action": {
+                                "type": "message",
+                                "label": "sightseeing",
+                                "text": "観光"
+                            }
+                        },
+                        {
+                            "type": "action",
+                            "imageUrl": "https://example.com/sushi.png",
+                            "action": {
+                                "type": "message",
+                                "label": "lunch",
+                                "text": "食事"
+                            }
+                        },
+                        {
+                            "type": "action",
+                            "action": {
+                                "type": "location",
+                                "label": "現在地を送る"
+                            }
+                        }
+                    ]}
+                }]
+            }
+
+        line_message.reply(body)
+        return HttpResponse("ok")
